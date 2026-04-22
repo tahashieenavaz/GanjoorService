@@ -16,10 +16,17 @@
             @if (nRecitationIndex != (Model.Recitations.Length - 1))
             {
                 <script>
-                    document.getElementById('audio-@recitaion.Id').addEventListener("ended", function () {
-                        document.getElementById('audio-@Model.Recitations[nRecitationIndex + 1].Id').play();
-                        showAllRecitations();
-                    });
+                    {
+                        const currentAudioEl = document.getElementById('audio-@recitation.Id');
+                        currentAudioEl.addEventListener("ended", () => {
+                            const nextAudioEl = document.getElementById('audio-@Model.Recitations[nRecitationIndex + 1].Id');
+                            if (nextAudioEl) nextAudioEl.play();
+                            
+                            if (typeof showAllRecitations === 'function') {
+                                showAllRecitations();
+                            }
+                        });
+                    }
                 </script>
             }
             <div class="recitaion-info">
