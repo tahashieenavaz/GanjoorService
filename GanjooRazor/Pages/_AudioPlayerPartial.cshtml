@@ -89,21 +89,28 @@
                 }
 
                 <script>
-                    document.getElementById('audio-@recitaion.Id').addEventListener('play', () => {
-                        currentAudio = document.getElementById('audio-@recitaion.Id');
-                        var audioList = document.querySelectorAll('audio');
-                        audioList.forEach(function (audioElement) {
-                            if (audioElement != currentAudio) {
-                                audioElement.pause();
+                    {
+                        const audioEl = document.getElementById('audio-@recitation.Id');
+                        audioEl.addEventListener('play', (e) => {
+                            window.currentAudio = e.target;
+                            
+                            document.querySelectorAll('audio').forEach((audioElement) => {
+                                if (audioElement !== e.target) {
+                                    audioElement.pause();
+                                }
+                            });
+
+                            if (typeof _setXml === 'function') {
+                                _setXml('@($"{GanjooRazor.APIRoot.InternetUrl}/api/audio/file/{recitation.Id}.xml")');
                             }
                         });
 
-                        _setXml('@($"{GanjooRazor.APIRoot.InternetUrl}/api/audio/file/{recitaion.Id}.xml")');
-                    });
-
-                    document.getElementById('audio-@recitaion.Id').addEventListener('timeupdate', () => {
-                        _trackTimeChanged(document.getElementById('audio-@recitaion.Id'));
-                    });
+                        audioEl.addEventListener('timeupdate', (e) => {
+                            if (typeof _trackTimeChanged === 'function') {
+                                _trackTimeChanged(e.target);
+                            }
+                        });
+                    }
                 </script>
             }
            
@@ -115,5 +122,3 @@
         }
     }
 </div>
-
-
